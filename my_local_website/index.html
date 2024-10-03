@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID">
+    <title>Welcome to the KaraOK registration!</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+        // This function runs when the user successfully signs in
+        function onSignIn(googleUser) {
+            // Get user profile information
+            var profile = googleUser.getBasicProfile();
+            document.getElementById('welcome-message').innerHTML = 'אתם מחוברים, אנא בחרו שיר!';
+            document.getElementById('login-section').style.display = 'none';
+        }
+
+        // Check if the user is already signed in
+        function checkLoginStatus() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            if (auth2.isSignedIn.get()) {
+                document.getElementById('welcome-message').innerHTML = 'אתם מחוברים, אנא בחרו שיר!';
+                document.getElementById('login-section').style.display = 'none';
+            } else {
+                document.getElementById('welcome-message').innerHTML = '';
+                document.getElementById('login-section').style.display = 'block';
+            }
+        }
+
+        // Sign-out function
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                document.getElementById('welcome-message').innerHTML = '';
+                document.getElementById('login-section').style.display = 'block';
+            });
+        }
+    </script>
+</head>
+<body onload="checkLoginStatus()">
+
+    <h1>Welcome to the KaraOK registration!</h1>
+    <h2>״ברוכות וברוכים הבאים להרשמה ל-KaraOK!״</h2>
+
+    <!-- Dynamic welcome message or login button -->
+    <div id="welcome-message"></div>
+
+    <!-- Google Login Section -->
+    <div id="login-section" style="display: none;">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+
+    <!-- Sign-out button (optional) -->
+    <button onclick="signOut()">Sign out</button>
+
+    <script>
+        // Initialize the Google API after the page loads
+        gapi.load('auth2', function() {
+            gapi.auth2.init().then(function(){
+                checkLoginStatus(); // Check login status once Google API is initialized
+            });
+        });
+    </script>
+
+</body>
+</html>

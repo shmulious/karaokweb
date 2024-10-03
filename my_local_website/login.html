@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+        function onSignIn(googleUser) {
+            // Get user profile information
+            var profile = googleUser.getBasicProfile();
+            console.log("User signed in:");
+            console.log("ID: " + profile.getId());
+            console.log("Name: " + profile.getName());
+            console.log("Image URL: " + profile.getImageUrl());
+            console.log("Email: " + profile.getEmail());
+
+            // Redirect or handle login logic
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+    </script>
+</head>
+<body>
+    <h2>Login Page</h2>
+
+    <!-- Google Sign-In Button -->
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <!-- Facebook Login Button -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : 'YOUR_FACEBOOK_APP_ID',
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v12.0'
+            });
+
+            FB.AppEvents.logPageView();   
+
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    console.log('User is logged in.');
+                } else {
+                    console.log('User is not logged in.');
+                }
+            });
+        };
+
+        function fbLogin() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    console.log('Welcome! Fetching your information.... ');
+                    FB.api('/me', function(response) {
+                        console.log('Good to see you, ' + response.name + '.');
+                    });
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                }
+            });
+        }
+    </script>
+    
+    <button onclick="fbLogin()">Login with Facebook</button>
+
+</body>
+</html>
